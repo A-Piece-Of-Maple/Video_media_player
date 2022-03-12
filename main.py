@@ -1,3 +1,4 @@
+#目前程序可以播放第一帧，后续帧数无法播放
 import cv2 as cv
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget
