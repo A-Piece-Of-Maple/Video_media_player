@@ -1,0 +1,2 @@
+# pyQt5_and_OpenCv_Video_media_player
+这是基于pyQt5
