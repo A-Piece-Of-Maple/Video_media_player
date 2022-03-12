@@ -1,2 +1,2 @@
 # pyQt5_and_OpenCv_Video_media_player
-这是基于pyQt5与OpenCv的视频媒体播放器的代码文件，主要用于实现视频帧处理后的帧刷新播放
+这是基于pyQt5与OpenCv的视频媒体播放器的代码文件，主要用于实现视频帧处理后的帧刷新播放（未完成）
