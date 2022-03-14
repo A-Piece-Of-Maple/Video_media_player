@@ -1,12 +1,12 @@
-#目前程序可以播放第一帧，后续帧数无法播放
 import cv2 as cv
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QTimer,Qt
 
 
 class Ui_Widget(object):
-    def setupUi(self, Widget):
+    def setupUi(self, Widget):#定义界面以及窗口大小
         super(Ui_Widget, self).__init__()
 
         Widget.setObjectName("Widget")
@@ -21,18 +21,28 @@ class Ui_Widget(object):
         self.label = QtWidgets.QLabel(Widget)
         self.label.setGeometry(QtCore.QRect(40, 40, 671, 351))
         self.label.setText("")
-        self.label.setScaledContents(1)#屏幕自适应
-        # self.label.setPixmap(QtGui.QPixmap("C:/a.png"))
+        self.label.setScaledContents(True)#屏幕自适应
         self.label.setObjectName("label")
+
+        self.timer=QTimer()#设置定时器
+        self.timer.timeout.connect(self.operate)#定时器连接槽函数
+        self.timer.start(3000)#3s调用一次
 
         self.retranslateUi(Widget)
         QtCore.QMetaObject.connectSlotsByName(Widget)
 
-    def retranslateUi(self, Widget):
+    def retranslateUi(self, Widget):#定义控件和控件文本
         _translate = QtCore.QCoreApplication.translate
         Widget.setWindowTitle(_translate("Widget", "Widget"))
         self.StartButton.setText(_translate("Widget", "播放"))
         self.PauseButton.setText(_translate("Widget", "暂停"))
+
+    def operate(self):#定时器调用函数
+        ret, img = capture.read()#读取一帧数据
+        # cv.imshow('video', fram)
+        img = cv.cvtColor(img, cv.COLOR_BGR2RGB)#数据格式转换
+        img = QtGui.QImage(img.data, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)#数据格式转换
+        ui.label.setPixmap(QtGui.QPixmap.fromImage(img))#显示一帧的图像
 
 
 if __name__ == '__main__':
@@ -40,35 +50,28 @@ if __name__ == '__main__':
     Widget = QWidget()
     ui = Ui_Widget()#类
     ui.setupUi(Widget)
-    #ui.label.setPixmap(QtGui.QPixmap("C:/a.png"))
-    # Widget.show()
 
-    capture = cv.VideoCapture("C:\\a.flv")
+    capture = cv.VideoCapture("C:\\a.avi")
+    ui.operate()#初始的第一帧图像显示
+
     Widget.show()
-
-    ret, img = capture.read()
-    # cv.imshow('video', fram)
-    img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-    img = QtGui.QImage(img.data, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)
-    ui.label.setPixmap(QtGui.QPixmap.fromImage(img))
-
-    # while(True):
 
     sys.exit(app.exec_())
 
-    #假设下面的代码已经实现帧处理
-    #需要处理的问题就是如何在Qt界面上显示这个视频
-    # capture=cv.VideoCapture("C:\\a.flv")
-    # while (True):
-    #     ret, fram = capture.read()  # 如果有视频,ret返回一个True,否则,返回False;fram为返回的内容
-    #     fram = cv.flip(fram, 1)  # 由于打开的是摄像头,内容与拍摄相反,需要进行翻转,1为左右翻转,-1为上下翻转
-    #     print(type(fram))
-    #
-    #     cv.imshow('video', fram)  # 展示fram内容
-    #     c = cv.waitKey(50)  # 等待用户50毫秒,即50毫秒每帧
-    #     if c == 27:  # 27为esc的键码
-    #         cv.destroyAllWindoes()  # 关闭窗口
-    #         break
+#下为用于测试的代码
+#假设下面的代码已经实现帧处理
+# #需要处理的问题就是如何在Qt界面上显示这个视频
+# capture=cv.VideoCapture("C:\\a.flv")
+# while (True):
+#     ret, fram = capture.read()  # 如果有视频,ret返回一个True,否则,返回False;fram为返回的内容
+#     fram = cv.flip(fram, 1)  # 由于打开的是摄像头,内容与拍摄相反,需要进行翻转,1为左右翻转,-1为上下翻转
+#     print(type(fram))
+#
+#     cv.imshow('video', fram)  # 展示fram内容
+#     c = cv.waitKey(50)  # 等待用户50毫秒,即50毫秒每帧
+#     if c == 27:  # 27为esc的键码
+#         cv.destroyAllWindoes()  # 关闭窗口
+#         break
 
 # import sys
 # from PyQt5.QtGui import *
