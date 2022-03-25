@@ -3,6 +3,8 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QTimer,Qt
+from PIL import Image
+import numpy as np
 
 
 class Ui_Widget(object):
@@ -24,9 +26,9 @@ class Ui_Widget(object):
         self.label.setScaledContents(True)#屏幕自适应
         self.label.setObjectName("label")
 
-        self.timer=QTimer()#设置定时器
-        self.timer.timeout.connect(self.operate)#定时器连接槽函数
-        self.timer.start(3000)#3s调用一次
+        #self.timer=QTimer()#设置定时器
+        #self.timer.timeout.connect(self.operate)#定时器连接槽函数
+        #self.timer.start(3000)#3s调用一次
 
         self.retranslateUi(Widget)
         QtCore.QMetaObject.connectSlotsByName(Widget)
@@ -37,12 +39,12 @@ class Ui_Widget(object):
         self.StartButton.setText(_translate("Widget", "播放"))
         self.PauseButton.setText(_translate("Widget", "暂停"))
 
-    def operate(self):#定时器调用函数
-        ret, img = capture.read()#读取一帧数据
-        # cv.imshow('video', fram)
-        img = cv.cvtColor(img, cv.COLOR_BGR2RGB)#数据格式转换
-        img = QtGui.QImage(img.data, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)#数据格式转换
-        ui.label.setPixmap(QtGui.QPixmap.fromImage(img))#显示一帧的图像
+    # def operate(self):#定时器调用函数
+    #     ret, img = capture.read()#读取一帧数据
+    #     img = cv.flip(img, 1)#画面翻转
+    #     img = cv.cvtColor(img, cv.COLOR_BGR2RGB)#数据格式转换
+    #     img = QtGui.QImage(img.data, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)#数据格式转换
+    #     ui.label.setPixmap(QtGui.QPixmap.fromImage(img))#显示一帧的图像
 
 
 if __name__ == '__main__':
@@ -51,16 +53,26 @@ if __name__ == '__main__':
     ui = Ui_Widget()#类
     ui.setupUi(Widget)
 
-    capture = cv.VideoCapture("C:\\a.avi")
-    ui.operate()#初始的第一帧图像显示
+
+    capture = cv.VideoCapture("C:\\test3.mp4")
+    ret, img = capture.read()  # 读取一帧数据
+    img = cv.cvtColor(img, cv.COLOR_BGR2RGB)  ##cv读进来是BGR形式的，需要转换成RGB形式
+    # blue = cv.split(img)[0]  ##得到图像蓝色通道灰度图
+
+    # ui.operate()#初始的第一帧图像显示
+
+    temp_imgSrc = QtGui.QImage(img[:], img.shape[1], img.shape[0], img.shape[1]*3, QtGui.QImage.Format_RGB888)
+    image3 = QtGui.QPixmap(temp_imgSrc)  ##QImage类型图像放入QPixmap
+    # 将图片转换为QPixmap方便显示
+    # pixmap_imgSrc = QtGui.QPixmap.fromImage(temp_imgSrc)
+
+    ui.label.setPixmap(image3)
 
     Widget.show()
 
     sys.exit(app.exec_())
 
 #下为用于测试的代码
-#假设下面的代码已经实现帧处理
-# #需要处理的问题就是如何在Qt界面上显示这个视频
 # capture=cv.VideoCapture("C:\\a.flv")
 # while (True):
 #     ret, fram = capture.read()  # 如果有视频,ret返回一个True,否则,返回False;fram为返回的内容
