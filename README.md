@@ -1,4 +1,6 @@
 # pyQt5_and_OpenCv_Video_media_player
 这是基于pyQt5与OpenCv的视频媒体播放器的代码文件，主要用于实现视频帧处理后的帧刷新播放（已完成），已经实现按帧播放的功能并且为帧处理提供了支持，准备进行代码兼容
+
 main.py主要用于Qt界面设计，同时用于测试opencv获取的BRG图像格式转化为RGB格式的功能
+
 track.py为整合后可运行的项目代码
