@@ -10,5 +10,8 @@
 ## QWidgetIconDemo.py
 测试QWidget界面的Icon控件的显示与响应
 
+## QWidgetPyqtChart.py
+测试QWidget界面的pyqtChart的实时显示
+
 ## main.py
 实际可以用来运行的代码
